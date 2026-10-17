@@ -18,4 +18,9 @@ class Game extends Model
     {
         return $this->hasMany(TopupPackage::class);
     }
+
+    public function transactions(): HasMany
+    {
+        return $this->hasMany(Transaction::class);
+    }
 }

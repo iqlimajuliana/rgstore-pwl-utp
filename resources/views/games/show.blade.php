@@ -19,12 +19,13 @@
             @if ($game->topupPackages->where('is_active', true)->count() > 0)
 
                 <div class="table-responsive">
-                    <table class="table table-bordered">
-                        <thead>
+                    <table class="table table-bordered align-middle mb-0">
+                        <thead class="table-light">
                             <tr>
-                                <th>No</th>
+                                <th style="width: 50px;">No</th>
                                 <th>Nominal</th>
                                 <th>Harga</th>
+                                <th class="text-center" style="width: 150px;">Aksi</th>
                             </tr>
                         </thead>
 
@@ -32,9 +33,14 @@
                             @foreach ($game->topupPackages->where('is_active', true) as $package)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $package->amount }}</td>
-                                    <td>
+                                    <td class="fw-medium">{{ $package->amount }}</td>
+                                    <td class="fw-bold text-danger">
                                         Rp {{ number_format($package->price, 0, ',', '.') }}
+                                    </td>
+                                    <td class="text-center">
+                                        <a href="{{ route('transactions.checkout', ['game_id' => $game->id, 'package_id' => $package->id]) }}" class="btn btn-primary btn-sm">
+                                            Beli Sekarang
+                                        </a>
                                     </td>
                                 </tr>
                             @endforeach
