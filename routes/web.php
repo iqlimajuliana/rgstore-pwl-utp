@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GameController;
 use App\Http\Controllers\TopupPackageController;
+use App\Http\Controllers\TransactionController;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -55,4 +56,15 @@ Route::middleware(['auth', 'role:admin'])
         Route::resource('games', GameController::class);
         Route::resource('packages', TopupPackageController::class);
     });
+
+// Transaksi & Riwayat Pembelian
+Route::middleware('auth')->group(function () {
+    Route::get('/checkout', [TransactionController::class, 'checkout'])->name('transactions.checkout');
+    Route::post('/checkout', [TransactionController::class, 'store'])->name('transactions.store');
+    Route::get('/transactions', [TransactionController::class, 'history'])->name('transactions.history');
+    Route::get('/transactions/{transaction}', [TransactionController::class, 'show'])->name('transactions.show');
+    Route::get('/transactions/{transaction}/payment', [TransactionController::class, 'payment'])->name('transactions.payment');
+    Route::post('/transactions/{transaction}/pay', [TransactionController::class, 'pay'])->name('transactions.pay');
+    Route::post('/transactions/{transaction}/cancel', [TransactionController::class, 'cancel'])->name('transactions.cancel');
+});
 

@@ -12,15 +12,45 @@
 </head>
 <body class="bg-light">
 
-    <nav class="navbar navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
-            <a class="navbar-brand fw-bold" href="/">
+            <a class="navbar-brand fw-bold" href="{{ Auth::check() ? (Auth::user()->role === 'admin' ? route('admin.dashboard') : route('user.dashboard')) : '/' }}">
                 RGStore
             </a>
 
-            <span class="text-white">
-                Game Top Up Store
-            </span>
+            @auth
+                <div class="d-flex align-items-center gap-2">
+                    <a href="{{ route('games.catalog') }}" class="btn btn-outline-light btn-sm">
+                        Katalog
+                    </a>
+                    <a href="{{ route('transactions.checkout') }}" class="btn btn-primary btn-sm">
+                        Top Up
+                    </a>
+                    <a href="{{ route('transactions.history') }}" class="btn btn-outline-info btn-sm">
+                        Riwayat
+                    </a>
+
+                    @if (Auth::user()->role === 'admin')
+                        <a href="{{ route('admin.games.index') }}" class="btn btn-warning btn-sm">
+                            Admin Game
+                        </a>
+                        <a href="{{ route('admin.packages.index') }}" class="btn btn-warning btn-sm">
+                            Admin Paket
+                        </a>
+                    @endif
+
+                    <form action="{{ route('logout') }}" method="POST" class="d-inline ms-2">
+                        @csrf
+                        <button type="submit" class="btn btn-danger btn-sm">
+                            Logout ({{ Auth::user()->name }})
+                        </button>
+                    </form>
+                </div>
+            @else
+                <span class="text-white">
+                    Game Top Up Store
+                </span>
+            @endauth
         </div>
     </nav>
 
