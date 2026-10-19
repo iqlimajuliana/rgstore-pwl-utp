@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GameController;
 use App\Http\Controllers\TopupPackageController;
@@ -29,12 +30,8 @@ Route::post('/logout', [AuthController::class, 'logout'])
     ->middleware('auth')
     ->name('logout');
 
-// Dashboard sementara wat admin
-Route::get('/admin/dashboard', function () {
-    return view('admin.dashboard', [
-        'title' => 'Dashboard Admin'
-    ]);
-})->middleware(['auth', 'role:admin'])
+Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])
+    ->middleware(['auth', 'role:admin'])
     ->name('admin.dashboard');
 
 // Dashboard sementara wat user
@@ -55,6 +52,12 @@ Route::middleware(['auth', 'role:admin'])
     ->group(function () {
         Route::resource('games', GameController::class);
         Route::resource('packages', TopupPackageController::class);
+        Route::get('complaints', [AdminController::class, 'complaints'])
+            ->name('complaints.index');
+        Route::get('complaints/{complaint}', [AdminController::class, 'showComplaint'])
+            ->name('complaints.show');
+        Route::patch('complaints/{complaint}/status', [AdminController::class, 'updateComplaintStatus'])
+            ->name('complaints.status');
     });
 
 // Transaksi & Riwayat Pembelian
