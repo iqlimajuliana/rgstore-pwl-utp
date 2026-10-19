@@ -52,4 +52,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Transaction::class);
     }
+
+    public function complaints(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Complaint::class);
+    }
 }
